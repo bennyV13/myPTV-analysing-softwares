@@ -2,8 +2,8 @@ import csv
 from collections import Counter
 
 # Define file paths
-csv_file_path = 'voxel_20/smoothed_trajectories'  # Input file path
-output_file_path = 'voxel_20/number_counts.txt'  # Final output file
+csv_file_path = r'20250203_analysis\rec14\smoothed_trajectories'  # Input file path
+output_file_path = r'20250203_analysis\rec14\trej_length.txt'  # Final output file
 
 # Initialize a Counter for counting occurrences
 counts = Counter()
