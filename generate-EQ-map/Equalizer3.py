@@ -7,6 +7,7 @@ import tifffile as tiff  # For handling TIFF files
 import matplotlib.pyplot as plt
 from scipy.ndimage import gaussian_filter
 from IPython import embed  # Optional: for interactive debugging if needed
+import math
 
 def Generate_EQ(folder_path, sigma):
     mip = generate_MIP(folder_path)
@@ -14,7 +15,11 @@ def Generate_EQ(folder_path, sigma):
 
 def Im_EQ(image, EQ_map):
     epsilon = 1e-6  # Prevent division by zero
-    return image / (EQ_map + epsilon)
+    image=image / (EQ_map + epsilon)
+    max=np.max(image)
+    ref=254.0/max
+    image=np.ceil(image*ref)
+    return image
 
 def generate_MIP(folder_path):
     z_stack = create_stack(folder_path)
@@ -51,13 +56,6 @@ def main(folder_path,output_path, sigma):
     # Generate the EQ_map
     EQ_map = Generate_EQ(folder_path, sigma)
     
-    # Display the EQ_map for review
-    plt.figure()
-    plt.imshow(EQ_map, cmap='gray')
-    plt.title('EQ_map Preview')
-    plt.axis('off')
-    plt.show()
-
     # Loop until the user confirms the EQ_map or chooses to exit
     while True:
         EQ_map = Generate_EQ(folder_path, sigma)
@@ -110,8 +108,8 @@ def main(folder_path,output_path, sigma):
 
         # Create new filename with "EQ" appended and save in the output folder
         output_filename = f"{file_name}_EQ.tif"
-        
-        tiff.imwrite(output_path, processed.astype(np.float32), dtype=np.float32)
+        full_output_path = os.path.join(output_path, output_filename)
+        tiff.imwrite(full_output_path, processed.astype(np.uint8))
 
 folder_path = r"c:\Users\bennyv\Documents_lab\Research-stuff\for-generate-EQ-map\eq-test-300-rec21-1\before"
 output_path = r"c:\Users\bennyv\Documents_lab\Research-stuff\for-generate-EQ-map\eq-test-300-rec21-1\after2"
