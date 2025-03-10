@@ -12,6 +12,6 @@ with open(csv_file_path, mode='r') as file:
     for row in csv_reader:
         # Convert the second column value to a number and add to the sum
         total_sum += float(row[list(row.keys())[1]])  # Use the second column by index
-
+#sdfadsf
 # Print the result
 print("Sum of the second column:", total_sum)
